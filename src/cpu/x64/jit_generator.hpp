@@ -127,7 +127,9 @@ static const Xbyak::Reg64 abi_param1(Xbyak::Operand::RDI),
 
 } // namespace
 
-class jit_generator : public Xbyak::CodeGenerator, public c_compatible {
+class jit_generator : public Xbyak::MmapAllocator,
+                      public Xbyak::CodeGenerator,
+                      public c_compatible {
 public:
     using c_compatible::operator new;
     using c_compatible::operator new[];
@@ -2048,11 +2050,14 @@ public:
 public:
     /* All uni_ instructions -- apart from uni_vzeroupper() -- will comply with
      * the max_cpu_isa argument */
-    jit_generator(void *code_ptr = nullptr, size_t code_size = MAX_CODE_SIZE,
-            bool use_autogrow = true, cpu_isa_t max_cpu_isa = isa_all)
-        : Xbyak::CodeGenerator(code_size,
-                (code_ptr == nullptr && use_autogrow) ? Xbyak::AutoGrow
-                                                      : code_ptr)
+    jit_generator(const char *name, void *code_ptr = nullptr,
+            size_t code_size = MAX_CODE_SIZE, bool use_autogrow = true,
+            cpu_isa_t max_cpu_isa = isa_all)
+        : Xbyak::MmapAllocator(name)
+        , Xbyak::CodeGenerator(code_size,
+                  (code_ptr == nullptr && use_autogrow) ? Xbyak::AutoGrow
+                                                        : code_ptr,
+                  /*allocator=*/this)
         , max_cpu_isa_(max_cpu_isa) {}
 
     virtual ~jit_generator() {}
