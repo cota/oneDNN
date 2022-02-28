@@ -48,8 +48,8 @@ using namespace Xbyak;
 template <template <cpu_isa_t isa, data_type_t d_type> class Derived,
         cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_kernel_t<Derived<isa, d_type>>::jit_uni_lrn_kernel_t(
-        void *code_ptr, size_t code_size)
-    : jit_generator(code_ptr, code_size, true, isa)
+        void *code_ptr, size_t code_size, const char *name)
+    : jit_generator(name, code_ptr, code_size, true, isa)
     , emulate_bfloat_(isa == avx512_common
               && d_type == dnnl::impl::data_type::bf16
               && !mayiuse(avx512_core_bf16))
@@ -65,8 +65,9 @@ jit_uni_lrn_kernel_t<Derived<isa, d_type>>::jit_uni_lrn_kernel_t(
 template <template <cpu_isa_t isa, data_type_t d_type> class Derived,
         cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_kernel_t<Derived<isa, d_type>>::jit_uni_lrn_kernel_t(
-        const within_config_t &config, void *code_ptr, size_t code_size)
-    : jit_uni_lrn_kernel_t(code_ptr, code_size) {
+        const within_config_t &config, void *code_ptr, size_t code_size,
+        const char *name)
+    : jit_uni_lrn_kernel_t(code_ptr, code_size, name) {
     if (config.dat_tag == nhwc)
         single_pixel_offset_
                 = config.C * sizeof(typename prec_traits<d_type>::type);
@@ -411,7 +412,7 @@ template <cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_fwd_kernel_t<isa, d_type>::jit_uni_lrn_fwd_kernel_t(
         const within_config_t &config, float A, float K, prop_kind_t pk,
         void *code_ptr, size_t code_size)
-    : Base(config, code_ptr, code_size)
+    : Base(config, code_ptr, code_size, jit_name())
     , config_(lrn_config_t::within_config)
     , within_config_(config)
     , alpha_(A)
@@ -446,7 +447,7 @@ template <cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_fwd_kernel_t<isa, d_type>::jit_uni_lrn_fwd_kernel_t(
         const struct nchw8c_across_t &J, float A, float K, prop_kind_t pk,
         void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nchw8c_across)
     , nchw8c_across_(J)
     , alpha_(A)
@@ -545,7 +546,7 @@ template <>
 jit_uni_lrn_fwd_kernel_t<sse41, dnnl::impl::data_type::f32>::
         jit_uni_lrn_fwd_kernel_t(const struct nchw8c_across_t &J, float A,
                 float K, prop_kind_t pk, void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nchw8c_across)
     , nchw8c_across_(J)
     , alpha_(A)
@@ -685,7 +686,7 @@ template <cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_fwd_kernel_t<isa, d_type>::jit_uni_lrn_fwd_kernel_t(
         const struct nhwc_across_t &J, float A, float K, prop_kind_t pk,
         void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nhwc_across)
     , nhwc_across_(J)
     , alpha_(A)
@@ -808,7 +809,7 @@ template <>
 jit_uni_lrn_fwd_kernel_t<sse41, dnnl::impl::data_type::f32>::
         jit_uni_lrn_fwd_kernel_t(const struct nhwc_across_t &J, float A,
                 float K, prop_kind_t pk, void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nhwc_across)
     , nhwc_across_(J)
     , alpha_(A)
@@ -1214,7 +1215,7 @@ template <cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_fwd_kernel_t<isa, d_type>::jit_uni_lrn_fwd_kernel_t(
         const nchw_across_t &J, float A, float K, prop_kind_t pk,
         void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nchw_across)
     , nchw_across_(J)
     , alpha_(A)
@@ -1307,7 +1308,7 @@ template <>
 jit_uni_lrn_fwd_kernel_t<sse41, dnnl::impl::data_type::f32>::
         jit_uni_lrn_fwd_kernel_t(const nchw_across_t &J, float A, float K,
                 prop_kind_t pk, void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nchw_across)
     , nchw_across_(J)
     , alpha_(A)
@@ -1486,7 +1487,7 @@ template <cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_bwd_kernel_t<isa, d_type>::jit_uni_lrn_bwd_kernel_t(
         const nchw8c_across_t &J, float A, float B, int use_h_parallel,
         void *code_ptr, size_t code_size)
-    : Base(code_ptr, code_size)
+    : Base(code_ptr, code_size, jit_name())
     , config_(lrn_config_t::nchw8c_across)
     , nchw8c_across_(J)
     , nalphabeta_(-2 * A * B)
@@ -1623,7 +1624,7 @@ template <cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_bwd_kernel_t<isa, d_type>::jit_uni_lrn_bwd_kernel_t(
         const within_config_t &config, float A, float B, void *code_ptr,
         size_t code_size)
-    : Base(config, code_ptr, code_size)
+    : Base(config, code_ptr, code_size, jit_name())
     , config_(lrn_config_t::within_config)
     , within_config_(config)
     , nalphabeta_(-2.0f * A * B) {}

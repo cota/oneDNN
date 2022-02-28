@@ -40,6 +40,7 @@ struct jit_brgemm_matmul_copy_a_impl_t : public jit_brgemm_matmul_copy_a_t,
 
     jit_brgemm_matmul_copy_a_impl_t(const brgemm_matmul_conf_t *conf)
         : jit_brgemm_matmul_copy_a_t(conf)
+        , jit_generator(jit_name())
         , typesize(conf_->a_dt_sz)
         , vnni_granularity(granularity_max / typesize)
         , k_step(bytes_in_zmm / typesize) {}
@@ -376,6 +377,7 @@ struct jit_brgemm_matmul_copy_a_transposed_impl_t
 
     jit_brgemm_matmul_copy_a_transposed_impl_t(const brgemm_matmul_conf_t *conf)
         : jit_brgemm_matmul_copy_a_t(conf)
+        , jit_generator(jit_name())
         , typesize(conf_->a_dt_sz)
         , src_stride(conf_->M * typesize)
         , dst_stride(conf_->LDA * typesize)
@@ -884,7 +886,7 @@ struct jit_brgemm_matmul_copy_b_int8_t : public jit_brgemm_matmul_copy_b_t,
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_brgemm_matmul_copy_b_int8_t)
 
     jit_brgemm_matmul_copy_b_int8_t(const brgemm_matmul_conf_t *conf)
-        : jit_brgemm_matmul_copy_b_t(conf) {}
+        : jit_brgemm_matmul_copy_b_t(conf), jit_generator(jit_name()) {}
 
     void operator()(ctx_t *ctx) override { jit_generator::operator()(ctx); }
     status_t create_kernel() override { return jit_generator::create_kernel(); }
@@ -1363,7 +1365,7 @@ struct jit_brgemm_matmul_copy_b_bf16_t : public jit_brgemm_matmul_copy_b_t,
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_brgemm_matmul_copy_b_bf16_t)
 
     jit_brgemm_matmul_copy_b_bf16_t(const brgemm_matmul_conf_t *conf)
-        : jit_brgemm_matmul_copy_b_t(conf) {}
+        : jit_brgemm_matmul_copy_b_t(conf), jit_generator(jit_name()) {}
 
     void operator()(ctx_t *ctx) override { jit_generator::operator()(ctx); }
     status_t create_kernel() override { return jit_generator::create_kernel(); }
@@ -1548,6 +1550,7 @@ struct jit_brgemm_matmul_copy_b_f32_t : public jit_brgemm_matmul_copy_b_t,
 
     jit_brgemm_matmul_copy_b_f32_t(const brgemm_matmul_conf_t *conf)
         : jit_brgemm_matmul_copy_b_t(conf)
+        , jit_generator(jit_name())
         , src_stride_(conf_->N * typesize)
         , tr_src_stride_(conf_->LDB * typesize) {}
 
@@ -1686,6 +1689,7 @@ struct jit_brgemm_matmul_copy_b_transposed_t
 
     jit_brgemm_matmul_copy_b_transposed_t(const brgemm_matmul_conf_t *conf)
         : jit_brgemm_matmul_copy_b_t(conf)
+        , jit_generator(jit_name())
         , typesize(conf_->b_dt_sz)
         , vnni_granularity(granularity_max / typesize)
         , k_blk_step(bytes_in_zmm / typesize)
