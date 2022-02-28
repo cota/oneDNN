@@ -36,7 +36,8 @@ using namespace Xbyak;
 struct jit_trans_iw_ic_t : public jit_trans_src_t, public jit_generator {
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_trans_iw_ic_t)
 
-    jit_trans_iw_ic_t(const jit_conv_conf_t *conf) : jit_trans_src_t(conf) {}
+    jit_trans_iw_ic_t(const jit_conv_conf_t *conf)
+        : jit_trans_src_t(conf), jit_generator(jit_name()) {}
 
     void operator()(ctx_t *ctx) override { jit_generator::operator()(ctx); }
 
@@ -340,7 +341,7 @@ void jit_trans_iw_ic_t::generate() {
 struct jit_trans_iw_ic_int16_t : public jit_trans_src_t, public jit_generator {
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_trans_iw_ic_int16_t)
     jit_trans_iw_ic_int16_t(const jit_conv_conf_t *conf)
-        : jit_trans_src_t(conf) {}
+        : jit_trans_src_t(conf), jit_generator(jit_name()) {}
 
     void operator()(ctx_t *ctx) override { jit_generator::operator()(ctx); }
 
@@ -777,7 +778,8 @@ void jit_trans_iw_ic_int16_t::generate() {
 
 struct jit_trans_ow_oc_t : public jit_trans_dst_t, public jit_generator {
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_trans_ow_oc_t)
-    jit_trans_ow_oc_t(const jit_conv_conf_t *conf) : jit_trans_dst_t(conf) {}
+    jit_trans_ow_oc_t(const jit_conv_conf_t *conf)
+        : jit_trans_dst_t(conf), jit_generator(jit_name()) {}
 
     void operator()(ctx_t *ctx) override { jit_generator::operator()(ctx); }
 
@@ -995,7 +997,8 @@ void jit_trans_ow_oc_t::generate() {
 struct jit_trans_iw_x4_4x_t : public jit_trans_src_t, public jit_generator {
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_trans_iw_x4_4x_t)
 
-    jit_trans_iw_x4_4x_t(const jit_conv_conf_t *conf) : jit_trans_src_t(conf) {}
+    jit_trans_iw_x4_4x_t(const jit_conv_conf_t *conf)
+        : jit_trans_src_t(conf), jit_generator(jit_name()) {}
 
     void generate() override;
 
