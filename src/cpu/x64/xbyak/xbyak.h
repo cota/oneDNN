@@ -140,6 +140,10 @@
 	#include <stdint.h>
 #endif
 
+#if !defined(MFD_CLOEXEC) // defined only linux 3.17 or later
+        #undef XBYAK_USE_MEMFD
+#endif
+
 #if defined(_WIN64) || defined(__MINGW64__) || (defined(__CYGWIN__) && defined(__x86_64__))
 	#define XBYAK64_WIN
 #elif defined(__x86_64__)
@@ -419,6 +423,7 @@ enum LabelMode {
 	custom allocator
 */
 struct Allocator {
+	explicit Allocator(const std::string& = "") {} // same interface with MmapAllocator
 	virtual uint8_t *alloc(size_t size) { return reinterpret_cast<uint8_t*>(AlignedMalloc(size, inner::ALIGN_PAGE_SIZE)); }
 	virtual void free(uint8_t *p) { AlignedFree(p); }
 	virtual ~Allocator() {}
@@ -450,10 +455,12 @@ inline int getMacOsVersion()
 
 } // util
 #endif
-class MmapAllocator : Allocator {
+class MmapAllocator : public Allocator {
+	const std::string name_; // only used with XBYAK_USE_MEMFD
 	typedef XBYAK_STD_UNORDERED_MAP<uintptr_t, size_t> SizeList;
 	SizeList sizeList_;
 public:
+	explicit MmapAllocator(const std::string& name = "xbyak") : name_(name) {}
 	uint8_t *alloc(size_t size)
 	{
 		const size_t alignedSizeM1 = inner::ALIGN_PAGE_SIZE - 1;
@@ -469,7 +476,19 @@ public:
 		const int mojaveVersion = 18;
 		if (util::getMacOsVersion() >= mojaveVersion) mode |= MAP_JIT;
 #endif
-		void *p = mmap(NULL, size, PROT_READ | PROT_WRITE, mode, -1, 0);
+		int fd = -1;
+#if defined(XBYAK_USE_MEMFD)
+		fd = memfd_create(name_.c_str(), MFD_CLOEXEC);
+		if (fd != -1) {
+			mode = MAP_SHARED;
+			if (ftruncate(fd, size) != 0)
+				XBYAK_THROW_RET(ERR_CANT_ALLOC, 0)
+		}
+#endif
+		void *p = mmap(NULL, size, PROT_READ | PROT_WRITE, mode, fd, 0);
+#if defined(XBYAK_USE_MEMFD)
+		if (fd != -1) close(fd);
+#endif
 		if (p == MAP_FAILED) XBYAK_THROW_RET(ERR_CANT_ALLOC, 0)
 		assert(p);
 		sizeList_[(uintptr_t)p] = size;
@@ -484,6 +503,8 @@ public:
 		sizeList_.erase(i);
 	}
 };
+#else
+typedef Allocator MmapAllocator;
 #endif
 
 class Address;
