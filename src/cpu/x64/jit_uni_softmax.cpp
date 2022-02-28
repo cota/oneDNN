@@ -255,7 +255,7 @@ struct jit_softmax_base_t : public jit_generator {
     }
 
     jit_softmax_base_t(const softmax_pd_t *pd)
-        : jit_generator(nullptr, MAX_CODE_SIZE, true, isa)
+        : jit_generator(jit_name(), nullptr, MAX_CODE_SIZE, true, isa)
         , pd_(pd)
         , data_d_(pd_->dst_md()) {
         is_bf16_ = data_d_.data_type() == data_type::bf16;

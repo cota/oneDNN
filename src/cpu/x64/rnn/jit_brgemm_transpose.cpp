@@ -25,7 +25,8 @@ namespace cpu {
 namespace x64 {
 
 jit_brgemm_transpose_t::jit_brgemm_transpose_t(const int m_block)
-    : m_block_(m_block)
+    : jit_generator(jit_name())
+    , m_block_(m_block)
     , full_loop_iters_(m_block_ / (vmms_available_ * simd_w_))
     , tail_(m_block_ % simd_w_)
     , k_blocks_nb_(m_block_ / simd_w_) {}

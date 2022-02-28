@@ -30,7 +30,7 @@ using namespace data_type;
 jit_avx512_core_brgemm_conv_trans_kernel_t::
         jit_avx512_core_brgemm_conv_trans_kernel_t(
                 const jit_brgemm_conv_conf_t &ajcp)
-    : jcp(ajcp) {
+    : jit_generator(jit_name()), jcp(ajcp) {
     src_dsz = jcp.src_dsz;
     ic_block_sz = src_dsz * jcp.ic_block;
     out_h_offset = jcp.iwp * ic_block_sz;

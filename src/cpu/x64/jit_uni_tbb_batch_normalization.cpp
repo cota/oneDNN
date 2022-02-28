@@ -654,7 +654,8 @@ struct jit_bnorm_fwd_statistics_t : public jit_generator {
 
     jit_bnorm_fwd_statistics_t(const batch_normalization_pd_t *bdesc,
             const jit_memory_tag_kind_t tag_kind)
-        : bdesc_(bdesc)
+        : jit_generator(jit_name())
+        , bdesc_(bdesc)
         , tag_kind_(tag_kind)
         , vlen(get_vlen<isa>(tag_kind))
         , simd_w(get_simd_w<isa>(tag_kind))
@@ -954,7 +955,8 @@ struct jit_bnorm_fwd_t : public jit_generator {
 
     jit_bnorm_fwd_t(const batch_normalization_pd_t *bdesc,
             const jit_memory_tag_kind_t tag_kind)
-        : bdesc_(bdesc)
+        : jit_generator(jit_name())
+        , bdesc_(bdesc)
         , tag_kind_(tag_kind)
         , vlen(get_vlen<isa>(tag_kind))
         , simd_w(get_simd_w<isa>(tag_kind))
@@ -1242,7 +1244,8 @@ struct jit_bnorm_bwd_t : public jit_generator {
 
     jit_bnorm_bwd_t(const batch_normalization_pd_t *bdesc,
             const jit_memory_tag_kind_t tag_kind)
-        : bdesc_(bdesc)
+        : jit_generator(jit_name())
+        , bdesc_(bdesc)
         , tag_kind_(tag_kind)
         , vlen(get_vlen<isa>(tag_kind))
         , simd_w(get_simd_w<isa>(tag_kind))
@@ -1637,7 +1640,8 @@ struct jit_bnorm_bwd_diff_ss_t : public jit_generator {
 
     jit_bnorm_bwd_diff_ss_t(const batch_normalization_pd_t *bdesc,
             const jit_memory_tag_kind_t tag_kind)
-        : bdesc_(bdesc)
+        : jit_generator(jit_name())
+        , bdesc_(bdesc)
         , tag_kind_(tag_kind)
         , vlen(get_vlen<isa>(tag_kind))
         , simd_w(get_simd_w<isa>(tag_kind))
