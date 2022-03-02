@@ -1353,7 +1353,7 @@ struct jit_uni_reorder_kernel_f32_t : public kernel_t, public jit_generator {
     }
 
     jit_uni_reorder_kernel_f32_t(const desc_t &desc)
-        : kernel_t(desc), jit_generator("jit_uni_reorder_kernel_f32"),
+        : kernel_t(desc), jit_generator(jit_name()),
           bf16_emu_(nullptr) {
         itype_sz_ = data_type_size(prb_.itype);
         otype_sz_ = data_type_size(prb_.otype);
@@ -1528,7 +1528,7 @@ struct jit_single_blk_kernel_t : public jit_generator {
     }
 
     jit_single_blk_kernel_t(const tr::prb_t &prb)
-        : jit_generator("jit_single_blk_kernel"), prb_(prb)
+        : jit_generator(jit_name()), prb_(prb)
         , itype_sz_(data_type_size(prb_.itype))
         , otype_sz_(data_type_size(prb_.otype))
         , block_sz(prb.nodes[0].n) {}

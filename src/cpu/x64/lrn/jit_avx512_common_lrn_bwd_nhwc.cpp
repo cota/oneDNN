@@ -32,7 +32,7 @@ jit_avx512_common_lrn_kernel_bwd_nhwc_t<
         size_t code_size)
     : jit_avx512_common_lrn_kernel_bwd_t<d_type>(
             alpha, beta, local_size, code_ptr, code_size,
-            "jit_avx512_common_lrn_kernel_bwd_nhwc_t")
+            jit_name())
     , tmp_mask_prev_ {[this]() {
         std::vector<int> v(this->local_size_ / 2);
         std::iota(v.begin(), v.end(), this->zdiffsrc_ + 2);

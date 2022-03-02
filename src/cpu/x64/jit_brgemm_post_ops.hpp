@@ -46,7 +46,7 @@ struct brgemm_kernel_diff_bias_t {
 struct jit_brgemm_kernel_diff_bias_t : public jit_generator {
     jit_brgemm_kernel_diff_bias_t(
             const jit_brgemm_primitive_conf_t &ajbgp, const brgemm_t &abrg)
-        : jit_generator("jit_brgemm_kernel_diff_bias_t"), brg_(abrg)
+        : jit_generator(jit_name()), brg_(abrg)
         , ddst_dt_(ajbgp.dst_dt)
         , bia_dt_(ajbgp.bia_dt)
         , acc_dt_(ajbgp.acc_dt)
@@ -274,7 +274,7 @@ struct jit_brgemm_kernel_post_ops : public jit_generator {
 
     jit_brgemm_kernel_post_ops(const jit_brgemm_conv_conf_t &ajcp,
             const brgemm_t &abrg, const primitive_attr_t &aattr)
-        : jit_generator("jit_brgemm_kernel_post_ops"), brg(abrg)
+        : jit_generator(jit_name()), brg(abrg)
         , jcp(ajcp)
         , attr(aattr)
         , postops_injector_(nullptr)

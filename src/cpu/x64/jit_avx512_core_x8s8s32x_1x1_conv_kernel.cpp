@@ -48,7 +48,7 @@ _jit_avx512_core_x8s8s32x_1x1_conv_kernel<Vmm>::
         _jit_avx512_core_x8s8s32x_1x1_conv_kernel(
                 const jit_1x1_conv_conf_t &ajcp, const primitive_attr_t &attr,
                 const memory_desc_t &dst_md)
-    : jit_generator("_jit_avx512_core_x8s8s32x_1x1_conv_fwd_ker_t"), jcp(ajcp), attr_(attr), postops_injector_(nullptr) {
+    : jit_generator(jit_name()), jcp(ajcp), attr_(attr), postops_injector_(nullptr) {
     if (jcp.with_eltwise || jcp.with_binary || jcp.with_sum) {
         using namespace binary_injector;
         static constexpr bool preserve_gpr = true;

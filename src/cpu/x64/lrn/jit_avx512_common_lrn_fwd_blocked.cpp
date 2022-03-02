@@ -29,7 +29,7 @@ jit_avx512_common_lrn_kernel_fwd_blocked_t<d_type>::
                 int local_size, void *code_ptr, size_t code_size)
     : jit_avx512_common_lrn_kernel_fwd_t<d_type>(
             prop_kind, alpha, beta, k, local_size, code_ptr, code_size,
-            "jit_avx512_common_lrn_kernel_fwd_blocked_t")
+            jit_name())
     , use_h_parallelism_(use_h_parallel) {
     // some registers needed for conversion from bf16 to f32
     src_prev_offset_ = this->vlen_ - 4 * sizeof(data_t);

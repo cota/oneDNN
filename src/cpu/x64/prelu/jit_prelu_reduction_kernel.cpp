@@ -32,7 +32,7 @@ static dim_t get_C(const cpu_prelu_bwd_pd_t *pd) {
 
 jit_prelu_reduction_kernel_t::jit_prelu_reduction_kernel_t(
         const cpu_prelu_bwd_pd_t *pd, int simd_w)
-    : jit_generator("jit_prelu_reduction_kernel_t"), scratchpad_c_block_offset_(
+    : jit_generator(jit_name()), scratchpad_c_block_offset_(
             utils::rnd_up(get_C(pd), alignment) * sizeof(float))
     , simd_w_(simd_w)
     , data_type_(pd->diff_weights_md(0)->data_type)

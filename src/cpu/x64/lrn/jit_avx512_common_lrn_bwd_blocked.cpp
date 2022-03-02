@@ -31,7 +31,7 @@ jit_avx512_common_lrn_kernel_bwd_blocked_t<d_type>::
                 size_t code_size)
     : jit_avx512_common_lrn_kernel_bwd_t<d_type>(
             alpha, beta, local_size, code_ptr, code_size,
-            "jit_avx512_common_lrn_kernel_bwd_blocked_t")
+            jit_name())
     , xmm_size_ {4 * sizeof(acc_data_t)}
     , zmm_size_ {64}
     , buffer_block_ {xmm_size_ + zmm_size_ + xmm_size_}

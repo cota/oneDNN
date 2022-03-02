@@ -29,7 +29,7 @@ jit_prelu_forward_kernel_t::jit_prelu_forward_kernel_t(
             prelu::get_bcast_type(memory_desc_wrapper(pd->src_md(0)),
                     memory_desc_wrapper(pd->weights_md(0))),
             memory_desc_wrapper(pd->src_md(0)), number_vmm_single_compute,
-            "jit_prelu_forward_kernel_t")
+            jit_name())
     , src_dt_(pd->src_md(0)->data_type)
     , wei_dt_(pd->weights_md(0)->data_type)
     , dst_dt_(pd->dst_md(0)->data_type)

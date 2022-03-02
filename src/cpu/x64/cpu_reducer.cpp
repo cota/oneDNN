@@ -102,7 +102,7 @@ struct reducer_2d_driver_t : public jit_generator {
 
     reducer_2d_driver_t(int n_src, size_t src_ld, size_t src_step,
             size_t dst_step, bool nullify_dst)
-        : jit_generator("reducer_2d_driver_f_s_32_t"), n_src_(n_src)
+        : jit_generator(jit_name()), n_src_(n_src)
         , src_ld_(src_ld)
         , src_step_(src_step)
         , dst_step_(dst_step)

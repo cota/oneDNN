@@ -51,7 +51,7 @@ struct jit_avx512_common_resampling_kernel_t
 
     jit_avx512_common_resampling_kernel_t(const resampling_pd_t *pd)
         : jit_avx512_common_resampling_kernel_base_t(pd,
-                  "jit_avx512_common_resampling")
+                  jit_name())
         , is_saturation_needed_(utils::one_of(dst_data_type(), data_type::u8,
                   data_type::s8, data_type::s32)) {
 

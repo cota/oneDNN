@@ -125,7 +125,7 @@ struct jit_uni_kernel_t : public jit_uni_eltwise_kernel {
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_uni_kernel)
 
     jit_uni_kernel_t(const eltwise_pd_t *pd)
-        : jit_uni_eltwise_kernel(pd, "jit_uni_kernel") {
+        : jit_uni_eltwise_kernel(pd, jit_name()) {
         if (is_bf16()) {
             if (!mayiuse(avx512_core_bf16))
                 bf16_emu_.reset(new bf16_emulation_t(this, bf16_emu_reserv_1,
