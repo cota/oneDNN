@@ -63,7 +63,7 @@ template <template <cpu_isa_t isa, data_type_t d_type> class Derived,
         cpu_isa_t isa, data_type_t d_type>
 jit_uni_lrn_kernel_t<Derived<isa, d_type>>::jit_uni_lrn_kernel_t(
         const within_config_t &config, void *code_ptr, size_t code_size)
-    : jit_uni_lrn_kernel_t(code_ptr, code_size), jit_generator("jit_uni_lrn_kernel_t") {
+    : jit_uni_lrn_kernel_t(code_ptr, code_size) {
     if (config.dat_tag == nhwc)
         single_pixel_offset_
                 = config.C * sizeof(typename prec_traits<d_type>::type);
