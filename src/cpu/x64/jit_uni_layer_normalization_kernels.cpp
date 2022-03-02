@@ -237,7 +237,7 @@ private:
 template <data_type_t data_type>
 jit_stat_and_data_kernel_t<data_type>::jit_stat_and_data_kernel_t(
         const layer_normalization_pd_t *pd)
-    : stat_and_data_kernel_t<data_type>(pd), jit_transfer_ {*this} {
+    : stat_and_data_kernel_t<data_type>(pd), jit_transfer_ {*this}, jit_generator("lnorm_utils::jit_stat_and_data_kernel_t") {
     assert(data_type == bf16 ? mayiuse(avx512_core) : mayiuse(avx2));
 }
 
@@ -492,7 +492,7 @@ private:
 template <data_type_t data_type>
 jit_diff_ss_kernel_t<data_type>::jit_diff_ss_kernel_t(
         const layer_normalization_pd_t *pd)
-    : diff_ss_kernel_t<data_type>(pd), jit_transfer_ {*this} {
+    : diff_ss_kernel_t<data_type>(pd), jit_transfer_ {*this}, jit_generator("lnorm_utils::jit_diff_ss_kernel_t") {
     assert(data_type == bf16 ? mayiuse(avx512_core) : mayiuse(avx2));
 }
 
@@ -658,7 +658,7 @@ private:
 template <data_type_t data_type>
 jit_diff_data_kernel_t<data_type>::jit_diff_data_kernel_t(
         const layer_normalization_pd_t *pd)
-    : diff_data_kernel_t<data_type>(pd), jit_transfer_ {*this} {
+    : diff_data_kernel_t<data_type>(pd), jit_transfer_ {*this}, jit_generator("lnorm_utils::jit_diff_data_kernel_t") {
     assert(data_type == bf16 ? mayiuse(avx512_core) : mayiuse(avx2));
 }
 

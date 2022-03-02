@@ -33,7 +33,7 @@ namespace jit_avx512_core_brgemm_conv_trans_kernel {
 jit_avx512_core_brgemm_conv_trans_kernel_t::
         jit_avx512_core_brgemm_conv_trans_kernel_t(
                 const jit_brgemm_conv_conf_t &ajcp)
-    : jcp(ajcp) {
+    : jit_generator("jit_avx512_core_brgemm_conv_trans_kernel_t"), jcp(ajcp) {
     inp_dsz = jcp.src_dsz;
     ic_block_sz = inp_dsz * jcp.ic_block;
     dst_w_block = dst_w(jcp.ow_block);

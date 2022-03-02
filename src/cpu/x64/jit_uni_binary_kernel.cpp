@@ -34,7 +34,7 @@ static bcast_set_t get_supported_postops_bcast_strategies() {
 
 binary_kernel_t::binary_kernel_t(const size_t vlen, const binary_pd_t *pd,
         const jit_binary_conf_t conf, bool tail_kernel)
-    : vlen_(vlen)
+    : jit_generator("jit_uni_binary_kernel_t"), vlen_(vlen)
     , simd_w_(vlen / sizeof(float))
     , pd_(pd)
     , conf_(conf)
