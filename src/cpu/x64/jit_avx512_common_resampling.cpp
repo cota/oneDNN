@@ -50,8 +50,7 @@ struct jit_avx512_common_resampling_kernel_t
     DECLARE_CPU_JIT_AUX_FUNCTIONS(jit_avx512_common_resampling)
 
     jit_avx512_common_resampling_kernel_t(const resampling_pd_t *pd)
-        : jit_avx512_common_resampling_kernel_base_t(pd,
-                  jit_name())
+        : jit_avx512_common_resampling_kernel_base_t(pd, jit_name())
         , is_saturation_needed_(utils::one_of(dst_data_type(), data_type::u8,
                   data_type::s8, data_type::s32)) {
 
@@ -788,8 +787,8 @@ private:
 } // namespace
 
 jit_avx512_common_resampling_kernel_base_t::
-        jit_avx512_common_resampling_kernel_base_t(const resampling_pd_t *pd,
-                                                   const char *name)
+        jit_avx512_common_resampling_kernel_base_t(
+                const resampling_pd_t *pd, const char *name)
     : jit_generator(name), pd_(pd) {}
 
 data_type_t jit_avx512_common_resampling_kernel_base_t::src_data_type() const {

@@ -38,8 +38,8 @@ struct jit_args_t {
 };
 
 struct jit_uni_eltwise_int_kernel : public jit_generator {
-    jit_uni_eltwise_int_kernel(const eltwise_desc_t &desc,
-            const char *name) : jit_generator(name),  desc_(desc) {}
+    jit_uni_eltwise_int_kernel(const eltwise_desc_t &desc, const char *name)
+        : jit_generator(name), desc_(desc) {}
 
     void operator()(jit_args_t *p) { jit_generator::operator()(p); }
 

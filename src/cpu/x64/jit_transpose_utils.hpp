@@ -122,7 +122,8 @@ struct jit_diff_wei_trans_to_vnni_t : public jit_generator {
 
     jit_diff_wei_trans_to_vnni_t(const int &kd, const int &kh, const int &kw,
             const int &ic_block, const int &oc_block)
-        : jit_generator(jit_name(), nullptr, MAX_CODE_SIZE, true, avx512_core_bf16)
+        : jit_generator(
+                jit_name(), nullptr, MAX_CODE_SIZE, true, avx512_core_bf16)
         , kd_(kd)
         , kh_(kh)
         , kw_(kw)

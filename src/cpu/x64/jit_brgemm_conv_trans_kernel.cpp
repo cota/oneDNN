@@ -394,8 +394,7 @@ void jit_avx512_core_brgemm_conv_trans_kernel_t::copy_ow_block_body(
 jit_avx512_core_brgemm_conv_rtus_kernel_t::
         jit_avx512_core_brgemm_conv_rtus_kernel_t(
                 const jit_brgemm_conv_conf_t &ajcp)
-    : jit_avx512_core_brgemm_conv_trans_kernel_t(ajcp,
-          jit_name()) {
+    : jit_avx512_core_brgemm_conv_trans_kernel_t(ajcp, jit_name()) {
     ic_block_sz = inp_dsz * jcp.LDA; // output may or may not be zero padded
     dst_h_offset = jcp.iwp * ic_block_sz;
 }
