@@ -37,7 +37,7 @@ constexpr int simd_w = 16;
 struct _jit_avx512_common_conv_winograd_data_kernel_f32 : public jit_generator {
     _jit_avx512_common_conv_winograd_data_kernel_f32(
             jit_conv_winograd_conf_t ajcp)
-        : jit_generator(nullptr, MAX_CODE_SIZE, false, avx512_core)
+        : jit_generator(jit_name(), nullptr, MAX_CODE_SIZE, false, avx512_core)
         , jcp(ajcp) {}
 
     void generate() override {
@@ -120,7 +120,7 @@ struct jit_avx512_common_conv_winograd_bwd_weights_kernel_f32
 
     jit_avx512_common_conv_winograd_bwd_weights_kernel_f32(
             jit_conv_winograd_conf_t ajcp)
-        : jit_generator(nullptr, MAX_CODE_SIZE, false, avx512_core)
+        : jit_generator(jit_name(), nullptr, MAX_CODE_SIZE, false, avx512_core)
         , jcp(ajcp) {}
 
     void generate() override {
